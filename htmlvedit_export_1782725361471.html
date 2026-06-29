@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Мой стиль</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif; }
+        body { background: #f2f2f7; padding: 16px; padding-bottom: 80px; max-width: 500px; margin: 0 auto; }
+        h1 { font-size: 28px; font-weight: 700; color: #1c1c1e; margin-bottom: 16px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #e5e5ea; border-radius: 30px; padding: 4px; }
+        .tab-btn { flex: 1; padding: 12px 0; border: none; border-radius: 30px; background: transparent; font-size: 16px; font-weight: 600; color: #8e8e93; cursor: pointer; transition: 0.2s; touch-action: manipulation; }
+        .tab-btn.active { background: #ffffff; color: #1c1c1e; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .card { background: #ffffff; border-radius: 20px; padding: 18px 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .card h2 { font-size: 18px; font-weight: 600; color: #1c1c1e; margin-bottom: 12px; }
+        .flex { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .flex input, .flex select, .flex button { flex: 1 1 auto; min-width: 120px; }
+        input, select, button { padding: 14px 16px; border-radius: 30px; border: 1px solid #d1d1d6; font-size: 16px; background: #f8f8fc; color: #1c1c1e; width: 100%; }
+        input:focus, select:focus { outline: none; border-color: #6C63FF; background: #fff; }
+        button { background: #6C63FF; color: white; border: none; font-weight: 600; cursor: pointer; transition: 0.15s; touch-action: manipulation; width: auto; padding: 14px 24px; }
+        button:active { transform: scale(0.96); background: #554bdb; }
+        .btn-outline { background: transparent; color: #6C63FF; border: 2px solid #6C63FF; }
+        .btn-outline:active { background: #6C63FF15; }
+        .btn-danger { background: #ff3b30; }
+        .btn-danger:active { background: #d63031; }
+        .btn-success { background: #34c759; }
+        .btn-success:active { background: #28a745; }
+        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
+        .file-input-wrapper input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        .preview-thumb { max-width: 80px; max-height: 80px; border-radius: 12px; margin-top: 6px; object-fit: cover; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 8px; }
+        .item { background: #f8f8fc; border-radius: 16px; padding: 10px; text-align: center; border: 1px solid #e5e5ea; position: relative; }
+        .item img { width: 100%; height: 120px; object-fit: cover; border-radius: 12px; background: #d1d1d6; }
+        .item .name { font-weight: 600; font-size: 14px; margin-top: 6px; word-break: break-word; }
+        .item .tags { font-size: 12px; color: #8e8e93; }
+        .item .status-badge { display: inline-block; padding: 2px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; margin-top: 4px; }
+        .status-have { background: #34c75920; color: #28a745; }
+        .status-ordered { background: #ffc10720; color: #b8860b; }
+        .status-need { background: #ff3b3020; color: #d63031; }
+        .item .del { background: #ff3b30; color: white; border: none; border-radius: 30px; padding: 6px 16px; font-size: 13px; margin-top: 6px; cursor: pointer; touch-action: manipulation; }
+        .item .del:active { transform: scale(0.95); }
+        .filter-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .filter-btns button { flex: 1; min-width: 60px; padding: 8px 12px; font-size: 14px; background: #e5e5ea; color: #1c1c1e; border: none; border-radius: 30px; }
+        .filter-btns button.active-filter { background: #6C63FF; color: white; }
+        .outfit-grid { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 12px 0; }
+        .outfit-item { background: #f0eeff; border-radius: 20px; padding: 14px; flex: 1 1 100px; min-width: 80px; text-align: center; }
+        .outfit-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; background: #ccc; margin-bottom: 6px; }
+        .outfit-item .label { font-size: 12px; color: #3a3a3c; }
+        .saved-outfit { background: #f8f8fc; border-radius: 16px; padding: 12px; margin-bottom: 12px; border: 1px solid #e5e5ea; }
+        .saved-outfit .outfit-name { font-weight: 600; margin-bottom: 8px; }
+        .empty-message { color: #8e8e93; padding: 20px 0; text-align: center; grid-column: 1 / -1; }
+        .badge { background: #6C63FF; color: white; border-radius: 30px; padding: 2px 12px; font-size: 14px; margin-left: 8px; }
+        .profile-field { margin-bottom: 12px; }
+        .profile-field label { display: block; font-size: 14px; font-weight: 500; color: #3a3a3c; margin-bottom: 4px; }
+        .profile-field input, .profile-field select { width: 100%; }
+        .save-profile-btn { margin-top: 8px; }
+        .create-outfit { display: flex; flex-direction: column; gap: 10px; }
+        .create-outfit select { width: 100%; }
+        .outfit-preview { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 10px 0; }
+        .outfit-preview .preview-item { text-align: center; width: 80px; }
+        .outfit-preview .preview-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; background: #ccc; }
+        .outfit-preview .preview-item .label { font-size: 11px; color: #3a3a3c; }
+        .hidden { display: none; }
+        .advice { background: #fff9e6; padding: 12px; border-radius: 16px; color: #856404; margin-top: 12px; border-left: 4px solid #ffc107; }
+    </style>
+</head>
+<body>
+
+<h1>👔 Мой стиль</h1>
+
+<!-- Вкладки -->
+<div class="tabs" id="tabContainer">
+    <button class="tab-btn active" data-tab="profile">👤 Профиль</button>
+    <button class="tab-btn" data-tab="wardrobe">👗 Гардероб</button>
+    <button class="tab-btn" data-tab="looks">✨ Образы</button>
+</div>
+
+<!-- ========== ВКЛАДКА ПРОФИЛЬ ========== -->
+<div id="profile" class="tab-content active">
+    <div class="card">
+        <h2>Мои параметры</h2>
+        <div class="profile-field">
+            <label>Имя</label>
+            <input type="text" id="profileName" placeholder="Ваше имя" />
+        </div>
+        <div class="profile-field">
+            <label>Возраст</label>
+            <input type="number" id="profileAge" placeholder="25" />
+        </div>
+        <div class="profile-field">
+            <label>Рост (см)</label>
+            <input type="number" id="profileHeight" placeholder="170" />
+        </div>
+        <div class="profile-field">
+            <label>Размеры (одежда, обувь)</label>
+            <input type="text" id="profileSizes" placeholder="Например: M, 42, 39" />
+        </div>
+        <div class="profile-field">
+            <label>Цветотип</label>
+            <select id="profileColorType">
+                <option value="весна">Весна</option>
+                <option value="лето">Лето</option>
+                <option value="осень">Осень</option>
+                <option value="зима">Зима</option>
+                <option value="не знаю">Не знаю</option>
+            </select>
+        </div>
+        <button id="saveProfileBtn" class="save-profile-btn">💾 Сохранить профиль</button>
+    </div>
+</div>
+
+<!-- ========== ВКЛАДКА ГАРДЕРОБ ========== -->
+<div id="wardrobe" class="tab-content">
+    <div class="card">
+        <h2>➕ Добавить вещь</h2>
+        <div class="flex" style="flex-direction: column; gap: 10px;">
+            <input type="text" id="itemName" placeholder="Название (синяя рубашка)" />
+            <select id="itemCategory">
+                <option value="верх">Верх</option>
+                <option value="низ">Низ</option>
+                <option value="обувь">Обувь</option>
+                <option value="аксессуар">Аксессуар</option>
+            </select>
+            <select id="itemColor">
+                <option value="красный">🔴 Красный</option>
+                <option value="синий">🔵 Синий</option>
+                <option value="зеленый">🟢 Зеленый</option>
+                <option value="черный">⚫ Черный</option>
+                <option value="белый">⚪ Белый</option>
+                <option value="серый">◻️ Серый</option>
+                <option value="желтый">🟡 Желтый</option>
+                <option value="оранжевый">🟠 Оранжевый</option>
+                <option value="фиолетовый">🟣 Фиолетовый</option>
+                <option value="розовый">🌸 Розовый</option>
+                <option value="коричневый">🟤 Коричневый</option>
+            </select>
+            <select id="itemStatus">
+                <option value="есть">✅ Есть</option>
+                <option value="заказал">📦 Заказал</option>
+                <option value="нужно купить">🛒 Нужно купить</option>
+            </select>
+            <div class="file-input-wrapper">
+                <button class="btn-outline" style="width:100%;">📷 Выбрать фото</button>
+                <input type="file" id="fileInput" accept="image/*" />
+            </div>
+            <div id="imagePreview" style="margin-top:4px;"></div>
+            <button id="addBtn" style="width:100%;">➕ Добавить</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📦 Мои вещи <span class="badge" id="count">0</span></h2>
+        <div class="filter-btns" id="filterContainer">
+            <button class="active-filter" data-filter="all">Все</button>
+            <button data-filter="есть">✅ Есть</button>
+            <button data-filter="заказал">📦 Заказал</button>
+            <button data-filter="нужно купить">🛒 Нужно</button>
+        </div>
+        <div id="itemsGrid" class="grid"></div>
+    </div>
+</div>
+
+<!-- ========== ВКЛАДКА ОБРАЗЫ ========== -->
+<div id="looks" class="tab-content">
+    <div class="card">
+        <h2>✨ Создать образ</h2>
+        <div class="create-outfit">
+            <select id="outfitTop"><option value="">— Верх —</option></select>
+            <select id="outfitBottom"><option value="">— Низ —</option></select>
+            <select id="outfitShoes"><option value="">— Обувь —</option></select>
+            <select id="outfitAccessory"><option value="">— Аксессуар —</option></select>
+            <input type="text" id="outfitName" placeholder="Название образа (например, 'На работу')" />
+            <button id="saveOutfitBtn" class="btn-success">💾 Сохранить образ</button>
+            <button id="randomOutfitBtn" class="btn-outline">🎲 Случайный лук</button>
+        </div>
+        <div id="outfitPreview" class="outfit-preview"></div>
+        <div id="outfitAdvice" class="advice hidden"></div>
+    </div>
+
+    <div class="card">
+        <h2>📸 Мои образы <span class="badge" id="lookCount">0</span></h2>
+        <div id="savedLooks"></div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    //  ГЛАВНЫЙ СКРИПТ — РАБОТАЕТ НА ЛЮБОМ УСТРОЙСТВЕ
+    // ============================================================
+    (function() {
+        "use strict";
+
+        // ---------- ДАННЫЕ ----------
+        let profile = {};
+        let wardrobe = [];
+        let looks = [];
+        let currentFilter = 'all';
+        let tempImage = '';
+
+        // ---------- ЗАГРУЗКА / СОХРАНЕНИЕ ----------
+        function loadData() {
+            try {
+                profile = JSON.parse(localStorage.getItem('profile')) || {};
+                wardrobe = JSON.parse(localStorage.getItem('wardrobe')) || [];
+                looks = JSON.parse(localStorage.getItem('looks')) || [];
+            } catch(e) {
+                profile = {};
+                wardrobe = [];
+                looks = [];
+            }
+            // Если пусто — добавим демо
+            if (wardrobe.length === 0 && looks.length === 0) {
+                const demoItems = [
+                    { name: 'Белая рубашка', category: 'верх', color: 'белый', status: 'есть', image: '' },
+                    { name: 'Синие джинсы', category: 'низ', color: 'синий', status: 'есть', image: '' },
+                    { name: 'Черные кеды', category: 'обувь', color: 'черный', status: 'есть', image: '' },
+                    { name: 'Кожаная сумка', category: 'аксессуар', color: 'коричневый', status: 'есть', image: '' },
+                    { name: 'Красное платье', category: 'верх', color: 'красный', status: 'заказал', image: '' }
+                ];
+                wardrobe.push(...demoItems);
+                looks.push({
+                    name: 'Повседневный',
+                    items: [wardrobe[0], wardrobe[1], wardrobe[2]]
+                });
+                saveAll();
+            }
+        }
+
+        function saveAll() {
+            localStorage.setItem('profile', JSON.stringify(profile));
+            localStorage.setItem('wardrobe', JSON.stringify(wardrobe));
+            localStorage.setItem('looks', JSON.stringify(looks));
+            renderAll();
+        }
+
+        // ---------- РЕНДЕР ----------
+        function renderAll() {
+            renderProfile();
+            renderWardrobe();
+            renderLooks();
+            updateCounts();
+            populateOutfitSelects();
+        }
+
+        function updateCounts() {
+            document.getElementById('count').textContent = wardrobe.length;
+            document.getElementById('lookCount').textContent = looks.length;
+        }
+
+        function renderProfile() {
+            document.getElementById('profileName').value = profile.name || '';
+            document.getElementById('profileAge').value = profile.age || '';
+            document.getElementById('profileHeight').value = profile.height || '';
+            document.getElementById('profileSizes').value = profile.sizes || '';
+            document.getElementById('profileColorType').value = profile.colorType || 'не знаю';
+        }
+
+        function renderWardrobe() {
+            const grid = document.getElementById('itemsGrid');
+            let filtered = wardrobe;
+            if (currentFilter !== 'all') {
+                filtered = wardrobe.filter(w => w.status === currentFilter);
+            }
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="empty-message">Нет вещей с таким статусом.</div>';
+                return;
+            }
+            grid.innerHTML = filtered.map((item, idx) => {
+                const realIdx = wardrobe.indexOf(item);
+                const imgSrc = item.image && item.image.trim() !== '' ? item.image : `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='120'%3E%3Crect width='140' height='120' fill='%23${colorToHex(item.color)}'/%3E%3Ctext x='50%25' y='50%25' font-size='14' fill='white' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(item.name)}%3C/text%3E%3C/svg%3E`;
+                const statusClass = item.status === 'есть' ? 'status-have' : (item.status === 'заказал' ? 'status-ordered' : 'status-need');
+                return `
+                    <div class="item">
+                        <img src="${imgSrc}" alt="${item.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22120%22%3E%3Crect width=%22140%22 height=%22120%22 fill=%22%23ccc%22/%3E%3C/svg%3E'" />
+                        <div class="name">${item.name}</div>
+                        <div class="tags">${item.category} • ${item.color}</div>
+                        <span class="status-badge ${statusClass}">${item.status}</span>
+                        <button class="del" data-index="${realIdx}">✕ Удалить</button>
+                    </div>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.del').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index);
+                    wardrobe.splice(idx, 1);
+                    saveAll();
+                });
+            });
+        }
+
+        function renderLooks() {
+            const container = document.getElementById('savedLooks');
+            if (looks.length === 0) {
+                container.innerHTML = '<div class="empty-message">Нет сохранённых образов.</div>';
+                return;
+            }
+            container.innerHTML = looks.map((look, idx) => {
+                const items = look.items || [];
+                const htmlItems = items.map(it => `
+                    <div class="outfit-item">
+                        <img src="${it.image || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23${colorToHex(it.color)}'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='white' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(it.name)}%3C/text%3E%3C/svg%3E`}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Crect width=%2280%22 height=%2280%22 fill=%22%23ccc%22/%3E%3C/svg%3E'" />
+                        <div class="label">${it.name}</div>
+                    </div>
+                `).join('');
+                return `
+                    <div class="saved-outfit">
+                        <div class="outfit-name">${look.name || 'Без названия'}</div>
+                        <div class="outfit-grid">${htmlItems}</div>
+                        <button class="del-look" data-index="${idx}" style="background:#ff3b30; color:white; border:none; border-radius:30px; padding:6px 16px; margin-top:8px;">Удалить образ</button>
+                    </div>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.del-look').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index);
+                    looks.splice(idx, 1);
+                    saveAll();
+                });
+            });
+        }
+
+        function colorToHex(color) {
+            const map = {
+                'красный': 'e74c3c', 'синий': '3498db', 'зеленый': '2ecc71',
+                'черный': '2c3e50', 'белый': 'ecf0f1', 'серый': '95a5a6',
+                'желтый': 'f1c40f', 'оранжевый': 'e67e22', 'фиолетовый': '9b59b6',
+                'розовый': 'fd79a8', 'коричневый': 'a67c52'
+            };
+            return map[color] || '95a5a6';
+        }
+
+        function populateOutfitSelects() {
+            const haveItems = wardrobe.filter(w => w.status === 'есть');
+            const categories = {
+                outfitTop: haveItems.filter(w => w.category === 'верх'),
+                outfitBottom: haveItems.filter(w => w.category === 'низ'),
+                outfitShoes: haveItems.filter(w => w.category === 'обувь'),
+                outfitAccessory: haveItems.filter(w => w.category === 'аксессуар')
+            };
+            for (let [id, items] of Object.entries(categories)) {
+                const select = document.getElementById(id);
+                if (!select) continue;
+                const currentVal = select.value;
+                select.innerHTML = '<option value="">— ' + id.replace('outfit','') + ' —</option>';
+                items.forEach(item => {
+                    const idx = wardrobe.indexOf(item);
+                    const opt = document.createElement('option');
+                    opt.value = idx;
+                    opt.textContent = item.name + ' (' + item.color + ')';
+                    select.appendChild(opt);
+                });
+                if (currentVal && select.querySelector(`option[value="${currentVal}"]`)) {
+                    select.value = currentVal;
+                }
+            }
+        }
+
+        // ---------- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК (ГАРАНТИРОВАННО РАБОТАЕТ) ----------
+        function initTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            if (tabButtons.length === 0 || tabContents.length === 0) {
+                console.error('❌ Элементы вкладок не найдены!');
+                return;
+            }
+
+            function switchTab(tabId) {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                const activeButton = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+                const activeContent = document.getElementById(tabId);
+                if (activeButton && activeContent) {
+                    activeButton.classList.add('active');
+                    activeContent.classList.add('active');
+                } else {
+                    console.warn('⚠️ Вкладка не найдена:', tabId);
+                }
+            }
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const tabId = this.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+
+            // Активируем первую вкладку по умолчанию (если ни одна не активна)
+            const anyActive = document.querySelector('.tab-content.active');
+            if (!anyActive) {
+                const firstTab = document.querySelector('.tab-btn.active');
+                if (firstTab) {
+                    switchTab(firstTab.dataset.tab);
+                } else if (tabButtons.length > 0) {
+                    switchTab(tabButtons[0].dataset.tab);
+                }
+            }
+        }
+
+        // ---------- НАСТРОЙКА СОБЫТИЙ ----------
+        function initEvents() {
+            // Профиль
+            document.getElementById('saveProfileBtn').addEventListener('click', function() {
+                profile.name = document.getElementById('profileName').value.trim();
+                profile.age = document.getElementById('profileAge').value.trim();
+                profile.height = document.getElementById('profileHeight').value.trim();
+                profile.sizes = document.getElementById('profileSizes').value.trim();
+                profile.colorType = document.getElementById('profileColorType').value;
+                saveAll();
+                alert('✅ Профиль сохранён!');
+            });
+
+            // Добавление вещи
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    tempImage = ev.target.result;
+                    document.getElementById('imagePreview').innerHTML = `<img src="${tempImage}" class="preview-thumb" /> <span style="font-size:13px; color:#8e8e93;">Фото выбрано</span>`;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            document.getElementById('addBtn').addEventListener('click', function() {
+                const name = document.getElementById('itemName').value.trim();
+                const category = document.getElementById('itemCategory').value;
+                const color = document.getElementById('itemColor').value;
+                const status = document.getElementById('itemStatus').value;
+                let image = tempImage;
+                if (!image) image = '';
+
+                if (!name) { alert('Введите название!'); return; }
+
+                wardrobe.push({ name, category, color, status, image });
+                tempImage = '';
+                document.getElementById('imagePreview').innerHTML = '';
+                document.getElementById('fileInput').value = '';
+                document.getElementById('itemName').value = '';
+                saveAll();
+            });
+
+            // Фильтры
+            document.querySelectorAll('.filter-btns button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btns button').forEach(b => b.classList.remove('active-filter'));
+                    this.classList.add('active-filter');
+                    currentFilter = this.dataset.filter;
+                    renderWardrobe();
+                });
+            });
+
+            // Сохранение образа
+            document.getElementById('saveOutfitBtn').addEventListener('click', function() {
+                const topIdx = document.getElementById('outfitTop').value;
+                const bottomIdx = document.getElementById('outfitBottom').value;
+                const shoesIdx = document.getElementById('outfitShoes').value;
+                const accIdx = document.getElementById('outfitAccessory').value;
+                const name = document.getElementById('outfitName').value.trim() || 'Образ ' + (looks.length + 1);
+
+                const indices = [topIdx, bottomIdx, shoesIdx, accIdx].filter(v => v !== '');
+                if (indices.length === 0) {
+                    alert('Выберите хотя бы одну вещь для образа!');
+                    return;
+                }
+                const items = indices.map(idx => wardrobe[parseInt(idx)]);
+                if (items.some(it => !it)) {
+                    alert('Некоторые вещи были удалены. Обновите страницу.');
+                    return;
+                }
+                looks.push({ name, items });
+                saveAll();
+                document.getElementById('outfitName').value = '';
+                ['outfitTop','outfitBottom','outfitShoes','outfitAccessory'].forEach(id => document.getElementById(id).value = '');
+                document.getElementById('outfitPreview').innerHTML = '';
+                document.getElementById('outfitAdvice').classList.add('hidden');
+                alert('✅ Образ сохранён!');
+            });
+
+            // Случайный образ
+            document.getElementById('randomOutfitBtn').addEventListener('click', function() {
+                const haveItems = wardrobe.filter(w => w.status === 'есть');
+                const tops = haveItems.filter(w => w.category === 'верх');
+                const bottoms = haveItems.filter(w => w.category === 'низ');
+                const shoes = haveItems.filter(w => w.category === 'обувь');
+                const accs = haveItems.filter(w => w.category === 'аксессуар');
+                if (tops.length === 0 || bottoms.length === 0 || shoes.length === 0) {
+                    alert('Для случайного образа нужны хотя бы один верх, один низ и одна обувь со статусом "Есть".');
+                    return;
+                }
+                const top = tops[Math.floor(Math.random() * tops.length)];
+                const bottom = bottoms[Math.floor(Math.random() * bottoms.length)];
+                const shoe = shoes[Math.floor(Math.random() * shoes.length)];
+                const acc = accs.length > 0 ? accs[Math.floor(Math.random() * accs.length)] : null;
+
+                const items = [top, bottom, shoe];
+                if (acc) items.push(acc);
+
+                const preview = document.getElementById('outfitPreview');
+                preview.innerHTML = items.map(it => `
+                    <div class="preview-item">
+                        <img src="${it.image || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23${colorToHex(it.color)}'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='white' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(it.name)}%3C/text%3E%3C/svg%3E`}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Crect width=%2280%22 height=%2280%22 fill=%22%23ccc%22/%3E%3C/svg%3E'" />
+                        <div class="label">${it.name}</div>
+                    </div>
+                `).join('');
+
+                const adviceDiv = document.getElementById('outfitAdvice');
+                const colors = items.map(it => it.color);
+                const badPairs = [
+                    ['красный','зеленый'], ['синий','оранжевый'], ['фиолетовый','желтый'],
+                    ['розовый','зеленый'], ['красный','розовый']
+                ];
+                let advice = '';
+                for (let pair of badPairs) {
+                    if (colors.includes(pair[0]) && colors.includes(pair[1])) {
+                        advice = `⚠️ Сочетание ${pair[0]} и ${pair[1]} рискованное. Попробуйте нейтральные цвета.`;
+                        break;
+                    }
+                }
+                if (!advice) advice = '✅ Хорошее сочетание!';
+                adviceDiv.textContent = advice;
+                adviceDiv.classList.remove('hidden');
+            });
+        }
+
+        // ---------- ЗАПУСК ----------
+        function init() {
+            loadData();
+            initTabs();
+            initEvents();
+            renderAll();
+            console.log('✅ Приложение успешно запущено!');
+        }
+
+        // Запускаем либо сразу (если DOM уже загружен), либо после загрузки
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            // DOM уже готов — запускаем сейчас
+            init();
+        }
+
+        // Дополнительно — дублируем запуск через 100 мс для подстраховки (iOS)
+        setTimeout(init, 100);
+    })();
+</script>
+</body>
+</html>
